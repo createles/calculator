@@ -36,19 +36,11 @@ function operate(number1, number2, op) {
     }
 }
 
-console.log(add(10,5));
-console.log(subtract(10,5));
-console.log(multiply(10,5));
-console.log(divide(10,5));
-
-op = "/";
-number1 = 8;
-number2 = 4;
-console.log(operate(number1, number2, op));
-
+// selects the display element and sets it's value to the base value of 0
 const display = document.querySelector("#display");
 display.textContent = displayValue;
 
+// updates the display with the appropriate values based on the button pressed
 let inputButtons = document.querySelectorAll(".numbButton");
 inputButtons.forEach(button => {
     button.addEventListener("click", () => {
@@ -56,6 +48,7 @@ inputButtons.forEach(button => {
         console.log("Button value:", button.textContent);
         console.log("Display value:", display.textContent);
 
+        // NOTE: comparison must be with "0" as .textContent is always of type STRING
         if (display.textContent === "0") {
             display.textContent = button.textContent;
             displayValue = Number(button.textContent);
@@ -63,5 +56,17 @@ inputButtons.forEach(button => {
             display.textContent += button.textContent;
             displayValue = Number(display.textContent);
         }
+    })
+})
+
+let operators = document.querySelectorAll(".operator");
+operators.forEach(button => {
+    button.addEventListener("click", () => {
+        op = button.textContent;
+        number1 = Number(display.textContent);
+        // unsure about this, review
+        // display.textContent = number1 + op;
+        console.log(op);
+        console.log(number1);
     })
 })
