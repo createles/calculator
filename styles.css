@@ -42,7 +42,7 @@ body {
     margin: 20px;
 }
 
-.numbButton {
+.buttonStyle {
     width: 30px;
     background-color: orange;
     flex-grow: 1;
@@ -56,9 +56,24 @@ body {
     flex-grow: 1;
 }
 
-.operator {
+.operatorStyle {
     width: 20px;
     background-color: rgb(82, 7, 117);
     flex-basis: 50%;
     text-align: center;
+    font-size: 22px;
+    color: white;
+}
+
+#equals {
+    width: 20px;
+    background-color: rgb(82, 7, 117);
+    flex-basis: 50%;
+    text-align: center;
+    font-size: 22px;
+    color: white;
+}
+
+#delete {
+    background-color: rgb(223, 99, 10);
 }
