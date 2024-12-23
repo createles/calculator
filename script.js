@@ -1,6 +1,7 @@
 let number1;
 let number2;
 let op;
+let displayValue = 0;
 
 
 function add(x, y) {
@@ -44,3 +45,23 @@ op = "/";
 number1 = 8;
 number2 = 4;
 console.log(operate(number1, number2, op));
+
+const display = document.querySelector("#display");
+display.textContent = displayValue;
+
+let inputButtons = document.querySelectorAll(".numbButton");
+inputButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        console.log("Button clicked:", button);
+        console.log("Button value:", button.textContent);
+        console.log("Display value:", display.textContent);
+
+        if (display.textContent === "0") {
+            display.textContent = button.textContent;
+            displayValue = Number(button.textContent);
+        } else {
+            display.textContent += button.textContent;
+            displayValue = Number(display.textContent);
+        }
+    })
+})
