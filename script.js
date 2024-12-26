@@ -56,6 +56,41 @@ inputButtons.forEach(button => {
     })
 })
 
+// Allows for keyboard input
+document.addEventListener("keydown", (event) => {
+    // for numbers
+    if (event.key >= '0' && event.key <= "9") {
+        let button = [...inputButtons].find(b => b.textContent === event.key);
+        if (button) {
+            button.click();
+        }
+    }
+    // for operator keys
+    if (operations.includes(event.key)) {
+        let button = [...operators].find(b => b.textContent === event.key);
+        if (button) {
+            button.click();
+        }
+    }
+    // for equals/enter key
+    if (event.key === "Enter") {
+        calculate.click();
+    }
+    // for decimal key
+    if (event.key === ".") {
+        decimal.click();
+    }
+    // for clear key
+    if (event.key === "c") {
+        clear.click();
+    }
+    // for backspace/delete
+    if (event.key === "Backspace" || event.key === "Delete") {
+        backspace.click();
+    }
+})
+
+
 let operators = document.querySelectorAll(".operator");
 operators.forEach(button => {
     button.addEventListener("click", () => {
@@ -86,6 +121,13 @@ operators.forEach(button => {
             let arr = display.textContent.split(op);
             number2 = Number(arr[1]);
             let prevResult = operate(number1, number2, op);
+            // // Round result to 9 decimal places if necessary; keep answer if not
+            let resultString = prevResult.toString();
+            if (resultString.includes(".") && resultString.split(".")[1].length > 9) {
+                prevResult = parseFloat(prevResult.toFixed(9));
+            } else {
+                prevResult = parseFloat(prevResult.toString())
+            }
             op = button.textContent;
             display.textContent = prevResult + op;
             number1 = prevResult;
@@ -105,12 +147,17 @@ calculate.addEventListener("click", () => {
             number1 = undefined;
             number2 = undefined;
             op = undefined;
-            console.log(number1);
-            console.log(number2);
-            console.log(op);
         } else {
-        display.textContent = operate(number1, number2, op);
-        op = undefined;
+            let result = operate(number1, number2, op);
+            // Round result to 9 decimal places if necessary; keep answer if not
+            let resultString = result.toString();
+            if (resultString.includes(".") && resultString.split(".")[1].length > 9) {
+                result = parseFloat(result.toFixed(9));
+            } else {
+                result = parseFloat(result.toString())
+            }
+            display.textContent = result;
+            op = undefined;
         }
     }
 })
@@ -123,6 +170,8 @@ clear.addEventListener("click", () => {
     op = undefined;
     display.textContent = 0;
 })
+
+
 // allows deletion of one digit at a time
 let backspace = document.querySelector("#backspace");
 backspace.addEventListener("click", () => {
