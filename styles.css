@@ -33,8 +33,9 @@ body {
     flex-wrap: wrap;
 }
 
-#display {
+#displayBox {
     display: flex;
+    flex-direction: column;
     justify-self: center;
     width: 300px;
     height: 100px;
@@ -44,6 +45,11 @@ body {
     align-items: flex-end;
     justify-content: right;
     overflow: hidden;
+}
+
+#display {
+    flex-grow: 1;
+    align-content: flex-end;
 }
 
 .buttonStyle {

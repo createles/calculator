@@ -41,6 +41,9 @@ function operate(number1, number2, op) {
 const display = document.querySelector("#display");
 display.textContent = displayValue;
 
+const history = document.querySelector("#history");
+history.textContent = "";
+
 // updates the display with the appropriate values based on the button pressed
 let inputButtons = document.querySelectorAll(".numbButton");
 inputButtons.forEach(button => {
@@ -112,14 +115,39 @@ operators.forEach(button => {
                 display.textContent = number1 + op;
             }
             // Checks if first number is a negative; allows for operations with negative first numbers
-        } else if ((display.textContent.slice(0))[0] === "-") {
-            op = button.textContent;
-            number1 = Number(display.textContent);
-            display.textContent = number1 + op;
+        } else if ((display.textContent.split(""))[0] === "-") {
+            // if last element is an operator and a new operator is pressed, replace with new one
+            if (operations.includes(display.textContent.split("")[display.textContent.length - 1])) {
+                op = button.textContent;
+                number1 = Number(display.textContent.slice(0, display.textContent.length - 1));
+                display.textContent = number1 + op;
+            // if the last element is not an operator, add operator to the end
+            } else if (display.textContent.slice(1).split("").find(element => operations.includes(element))) {
+                let removeNeg = display.textContent.slice(1);
+                let arr = removeNeg.split(op);
+                number2 = Number(arr[1]);
+                history.textContent = number1 + op + number2;
+                let prevResult = operate(number1, number2, op);
+                // // Round result to 9 decimal places if necessary; keep answer if not
+                let resultString = prevResult.toString();
+                if (resultString.includes(".") && resultString.split(".")[1].length > 9) {
+                    prevResult = parseFloat(prevResult.toFixed(9));
+                } else {
+                    prevResult = parseFloat(prevResult.toString())
+                }
+                op = button.textContent;
+                display.textContent = prevResult + op;
+                number1 = prevResult;
+            } else {
+                op = button.textContent;
+                number1 = Number(display.textContent);
+                display.textContent = number1 + op;
+            }
             // If equation already has a prior operator and a second number after it
         } else {
             let arr = display.textContent.split(op);
             number2 = Number(arr[1]);
+            history.textContent = number1 + op + number2;
             let prevResult = operate(number1, number2, op);
             // // Round result to 9 decimal places if necessary; keep answer if not
             let resultString = prevResult.toString();
@@ -139,15 +167,25 @@ let calculate = document.querySelector("#equals");
 calculate.addEventListener("click", () => {
     // *NOTE*: The condition here explicitly checks if number1 exists and IS NOT undefined. If number1 = 0, it is evaluated as falsy by Javascript.
     if (number1 !== undefined && op && !operations.includes(display.textContent[display.textContent.length - 1])) {
-        let arr = display.textContent.split(op);
-        number2 = Number(arr[1]);
+        // Handles the case of whether the first number is a negative to set the appropriate values for number1 and number2
+        if (display.textContent.split("")[0] === "-") {
+            let removeNeg = display.textContent.slice(1);
+            let arr = removeNeg.split(op);
+            number2 = Number(arr[1]);
+        } else {
+            let arr = display.textContent.split(op);
+            number2 = Number(arr[1]);
+        }
+
         if (number2 === 0 && op === "/") {
+            history.textContent = number1 + op + number2;
             let errorMsg = "Cannot divide by 0."
             display.textContent = errorMsg;
             number1 = undefined;
             number2 = undefined;
             op = undefined;
         } else {
+            history.textContent = number1 + op + number2;
             let result = operate(number1, number2, op);
             // Round result to 9 decimal places if necessary; keep answer if not
             let resultString = result.toString();
@@ -162,6 +200,7 @@ calculate.addEventListener("click", () => {
     }
 })
 
+
 // clears all variables and display
 let clear = document.querySelector("#clear");
 clear.addEventListener("click", () => {
@@ -169,6 +208,7 @@ clear.addEventListener("click", () => {
     number2 = undefined;
     op = undefined;
     display.textContent = 0;
+    history.textContent = "";
 })
 
 
