@@ -245,5 +245,8 @@ let decimal = document.querySelector("#dot");
 decimal.addEventListener("click", () => {
     if (!display.textContent.includes(".")) {
     display.textContent += ".";
-    }
+    // Handles cases of the first and second number having decimals
+    } else if (display.textContent.includes(".") && (display.textContent.split("").find(element => operations.includes(element))) && display.textContent.split("").filter(char => char === ".").length < 2 ) {
+        display.textContent += ".";
+    } 
 })
