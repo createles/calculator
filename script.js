@@ -77,6 +77,8 @@ document.addEventListener("keydown", (event) => {
     }
     // for equals/enter key
     if (event.key === "Enter") {
+        // prevents default behavior of enter key triggering last focused button brought about by a previous mouseclick
+        event.preventDefault();
         calculate.click();
     }
     // for decimal key
