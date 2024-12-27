@@ -110,17 +110,31 @@ operators.forEach(button => {
                 }
             // If the last element of the display is an operator and a new operator is pressed, replace with the new operator
             } else {
+                // properly handles cases when multiplying/dividing by a negative second number
+                if ((op === "*" || op === "/") && button.textContent === "-") {
+                    op = display.textContent.split("")[display.textContent.length - 1];
+                    number1 = Number(display.textContent.slice(0, display.textContent.length - 1));
+                    display.textContent = number1 + op + "-";
+                } else {
                 op = button.textContent;
                 number1 = Number(display.textContent.slice(0, display.textContent.length - 1));
                 display.textContent = number1 + op;
+                }
             }
             // Checks if first number is a negative; allows for operations with negative first numbers
         } else if ((display.textContent.split(""))[0] === "-") {
             // if last element is an operator and a new operator is pressed, replace with new one
             if (operations.includes(display.textContent.split("")[display.textContent.length - 1])) {
+                // properly handles cases when multiplying/dividing by a negative second number
+                if ((op === "*" || op === "/") && button.textContent === "-") {
+                    op = display.textContent.split("")[display.textContent.length - 1];
+                    number1 = Number(display.textContent.slice(0, display.textContent.length - 1));
+                    display.textContent = number1 + op + "-";
+                } else {
                 op = button.textContent;
                 number1 = Number(display.textContent.slice(0, display.textContent.length - 1));
                 display.textContent = number1 + op;
+                }
             // if the last element is not an operator, add operator to the end
             } else if (display.textContent.slice(1).split("").find(element => operations.includes(element))) {
                 let removeNeg = display.textContent.slice(1);
@@ -143,6 +157,11 @@ operators.forEach(button => {
                 number1 = Number(display.textContent);
                 display.textContent = number1 + op;
             }
+            
+            // If the last two elements on the display are an operator and a negative sign, disable the other operator buttons until a second number is input
+        } else if (display.textContent.split("")[display.textContent.length - 1] === "-") {
+            return;
+            
             // If equation already has a prior operator and a second number after it
         } else {
             let arr = display.textContent.split(op);
@@ -158,7 +177,7 @@ operators.forEach(button => {
             }
             op = button.textContent;
             display.textContent = prevResult + op;
-            number1 = prevResult;
+            number1 = prevResult;    
         }
     })
 })
